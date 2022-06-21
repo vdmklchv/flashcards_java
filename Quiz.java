@@ -4,15 +4,26 @@ public class Quiz {
     void start(int numberOfCards, CardStorage cardStorage, Screen screen, CardLookupTable cardLookupTable) {
         for (int i = 1; i <= numberOfCards; i++) {
             Card currentCard = cardStorage.getCardAtIndex(i - 1);
-            System.out.printf("Print the definition of \"%s\":\n", currentCard.getTerm());
+            String printCardMessage = "Print the definition of \"" + currentCard.getTerm() + "\":";
+            System.out.println(printCardMessage);
+            Logger.addToLog(printCardMessage);
             String answer = screen.getUserAnswer();
+            Logger.addToLog(answer);
             if (isAnswerCorrect(answer, currentCard.getDefinition())) {
                 System.out.println("Correct!");
+                Logger.addToLog("Correct!");
             } else if (cardLookupTable.getTermByDefinition(cardStorage.getCards(), answer) != null) {
-                System.out.printf("Wrong. The right answer is \"%s\", but your definition is correct for \"%s\".\n",
-                        currentCard.getDefinition(), cardLookupTable.getTermByDefinition(cardStorage.getCards(), answer));
+                String definitionCorrectForAnotherTerm = "Wrong. The right answer is \"" + currentCard.getDefinition()
+                        + "\", but your definition is correct for \""
+                        + cardLookupTable.getTermByDefinition(cardStorage.getCards(), answer) + "\".";
+                System.out.println(definitionCorrectForAnotherTerm);
+                Logger.addToLog(definitionCorrectForAnotherTerm);
+                currentCard.incrementErrors();
             } else {
-                System.out.printf("Wrong. The right answer is \"%s\".\n", currentCard.getDefinition());
+                String wrongAnswerMessage = "Wrong. The right answer is \"" + currentCard.getDefinition() + "\".";
+                System.out.println(wrongAnswerMessage);
+                Logger.addToLog(wrongAnswerMessage);
+                currentCard.incrementErrors();
             }
         }
     }

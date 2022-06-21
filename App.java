@@ -1,6 +1,8 @@
 package flashcards;
 import flashcards.Enums.*;
 
+import java.util.List;
+
 public class App {
 
     APP_STATE appState = APP_STATE.ON;
@@ -8,6 +10,9 @@ public class App {
     CardStorage cardStorage = new CardStorage();
     CardManager cardManager = new CardManager();
     Screen screen = new Screen();
+    StatsManager statsManager = new StatsManager();
+
+
     void start() {
         while (isAppOn()) {
             screen.showMenu();
@@ -18,31 +23,29 @@ public class App {
 
     private void action(String command) {
         switch (command) {
-            case "add":
+            case "add" -> {
                 Card card = cardManager.createCard(cardLookupTable);
                 cardManager.saveCard(card, cardStorage, cardLookupTable);
-                break;
-            case "remove":
-                cardManager.removeCard(screen, cardLookupTable, cardStorage);
-                break;
-            case "import":
-                cardManager.importCards(screen, cardStorage, cardLookupTable);
-                break;
-            case "export":
-                cardManager.exportCards(cardStorage, screen);
-                break;
-            case "ask":
+            }
+            case "remove" -> cardManager.removeCard(screen, cardLookupTable, cardStorage);
+            case "import" -> cardManager.importCards(screen, cardStorage, cardLookupTable);
+            case "export" -> cardManager.exportCards(cardStorage, screen);
+            case "ask" -> {
                 int numberOfQuestions = screen.askForNumberOfQuestions();
                 Quiz quiz = new Quiz();
                 quiz.start(numberOfQuestions, cardStorage, screen, cardLookupTable);
-                break;
-            case "exit":
+            }
+            case "exit" -> {
                 switchAppState();
                 System.out.println("Bye bye!");
-                break;
-            case "default":
-                System.out.println("Strange command");
-                break;
+            }
+            case "log" -> Logger.saveLog(screen);
+            case "hardest card" -> {
+                List<Card> hardestCards = statsManager.getHardestCards(cardStorage.getCards());
+                screen.printHardestCards(hardestCards);
+            }
+            case "reset stats" -> statsManager.resetStats(cardStorage);
+            case "default" -> System.out.println("Strange command");
         }
     }
 
