@@ -33,9 +33,14 @@ public class CardManager {
         }
     }
 
-    void importCards(Screen screen, CardStorage cardStorage, CardLookupTable cardLookupTable) {
-        String fileName = screen.askForFileName();
-        Logger.addToLog(fileName);
+    void importCards(Screen screen, CardStorage cardStorage, CardLookupTable cardLookupTable, String exportFile) {
+        String fileName;
+        if (exportFile.isEmpty()) {
+            fileName = screen.askForFileName();
+            Logger.addToLog(fileName);
+        } else {
+            fileName = exportFile;
+        }
         FileProcessor fileProcessor = new FileProcessor(fileName);
         File file = new File(fileProcessor.getName());
         List<Card> currentCards = cardStorage.getCards();
@@ -63,10 +68,15 @@ public class CardManager {
         cardLookupTable.updateCardLookupTable(currentCards);
     }
 
-    void exportCards(CardStorage cardStorage, Screen screen) {
+    void exportCards(CardStorage cardStorage, Screen screen, String exportParameter) {
         List<Card> cards = cardStorage.getCards();
-        String fileName = screen.askForFileName();
-        Logger.addToLog(fileName);
+        String fileName;
+        if (exportParameter.equals("")) {
+            fileName = screen.askForFileName();
+            Logger.addToLog(fileName);
+        } else {
+            fileName = exportParameter;
+        }
         FileProcessor fileProcessor = new FileProcessor(fileName);
         File file = new File(fileProcessor.getName());
         fileProcessor.backupToFile(file, cards);

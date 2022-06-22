@@ -2,6 +2,7 @@ package flashcards;
 import flashcards.Enums.*;
 
 import java.util.List;
+import java.util.Map;
 
 public class App {
 
@@ -10,42 +11,72 @@ public class App {
     CardStorage cardStorage = new CardStorage();
     CardManager cardManager = new CardManager();
     Screen screen = new Screen();
-    StatsManager statsManager = new StatsManager();
 
 
-    void start() {
+    void start(String[] args) {
+        StartArgumentsManager startArgumentsManager = new StartArgumentsManager();
+
+        boolean hasExportParameter = false;
+        String exportParameter = "";
+
+        Map<String, String> startArgumentsMap = startArgumentsManager.getStartArguments(args);
+        if (startArgumentsManager.hasArgument(startArgumentsMap, "-import")) {
+            String fileName = startArgumentsMap.get("-import");
+            cardManager.importCards(screen, cardStorage, cardLookupTable, fileName);
+        }
+        if (startArgumentsManager.hasArgument(startArgumentsMap, "-export")) {
+            hasExportParameter = true;
+            exportParameter = startArgumentsMap.get("-export");
+        }
         while (isAppOn()) {
             screen.showMenu();
             String command = screen.getMenuUserCommand();
-            action(command);
+            action(command, hasExportParameter, exportParameter);
         }
     }
 
-    private void action(String command) {
+    private void action(String command, boolean hasExportParameter, String exportParameter) {
+        StatsManager statsManager = new StatsManager();
+
         switch (command) {
-            case "add" -> {
+            case "add":
                 Card card = cardManager.createCard(cardLookupTable);
                 cardManager.saveCard(card, cardStorage, cardLookupTable);
-            }
-            case "remove" -> cardManager.removeCard(screen, cardLookupTable, cardStorage);
-            case "import" -> cardManager.importCards(screen, cardStorage, cardLookupTable);
-            case "export" -> cardManager.exportCards(cardStorage, screen);
-            case "ask" -> {
+                break;
+            case "remove":
+                cardManager.removeCard(screen, cardLookupTable, cardStorage);
+                break;
+            case "import":
+                cardManager.importCards(screen, cardStorage, cardLookupTable, "");
+                break;
+            case "export":
+                cardManager.exportCards(cardStorage, screen, exportParameter);
+                break;
+            case "ask":
                 int numberOfQuestions = screen.askForNumberOfQuestions();
                 Quiz quiz = new Quiz();
                 quiz.start(numberOfQuestions, cardStorage, screen, cardLookupTable);
-            }
-            case "exit" -> {
+                break;
+            case "exit":
+                if (hasExportParameter) {
+                    cardManager.exportCards(cardStorage, screen, exportParameter);
+                }
                 switchAppState();
                 System.out.println("Bye bye!");
-            }
-            case "log" -> Logger.saveLog(screen);
-            case "hardest card" -> {
+                break;
+            case "log":
+                Logger.saveLog(screen);
+                break;
+            case "hardest card":
                 List<Card> hardestCards = statsManager.getHardestCards(cardStorage.getCards());
                 screen.printHardestCards(hardestCards);
-            }
-            case "reset stats" -> statsManager.resetStats(cardStorage);
-            case "default" -> System.out.println("Strange command");
+                break;
+            case "reset stats":
+                statsManager.resetStats(cardStorage);
+                break;
+            case "default":
+                System.out.println("Strange command");
+                break;
         }
     }
 
@@ -56,4 +87,6 @@ public class App {
     boolean isAppOn() {
         return appState == APP_STATE.ON;
     }
+
+
 }

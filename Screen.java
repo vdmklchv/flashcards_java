@@ -9,10 +9,6 @@ import java.util.stream.Collectors;
 public class Screen {
     Scanner sc = new Scanner(System.in);
 
-    void printCard(Card card) {
-        System.out.println(card.toString());
-    }
-
     String getUserAnswer() {
         String userAnswer = sc.nextLine();
         Logger.addToLog(userAnswer);

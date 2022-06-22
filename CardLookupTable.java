@@ -10,10 +10,6 @@ public class CardLookupTable {
         this.cardLookupTable = new HashMap<>();
     }
 
-    public Map<String, String> getCardLookupTable() {
-        return cardLookupTable;
-    }
-
     public void updateCardLookupTable(List<Card> cards) {
         if (cards == null || cards.size() == 0) {
             return;
@@ -32,14 +28,6 @@ public class CardLookupTable {
 
     void remove(String term) {
         this.cardLookupTable.remove(term);
-    }
-
-    Set<String> getDefinitionSet() {
-        Set<String> definitionSet = new HashSet<>();
-        for (String value: cardLookupTable.values()) {
-            definitionSet.add(value);
-        }
-        return definitionSet;
     }
 
     boolean isTermExist(String term) {

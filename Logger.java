@@ -1,6 +1,5 @@
 package flashcards;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -10,10 +9,6 @@ import java.util.List;
 public class Logger {
 
     static List<String> log = new ArrayList<>();
-
-    static List<String> getLog() {
-        return log;
-    }
 
     static void addToLog(String content) {
         log.add(content);
@@ -25,7 +20,7 @@ public class Logger {
         File file = new File(fileName);
         try (FileWriter fileWriter = new FileWriter(file)) {
             for (String entry: log) {
-                fileWriter.append(entry + "\n");
+                fileWriter.append(entry).append("\n");
             }
             System.out.println("The log has been saved.");
             Logger.addToLog("The log has been saved.");
