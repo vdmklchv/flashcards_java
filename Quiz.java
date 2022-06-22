@@ -2,6 +2,10 @@ package flashcards;
 
 public class Quiz {
     void start(int numberOfCards, CardStorage cardStorage, Screen screen, CardLookupTable cardLookupTable) {
+        if (numberOfCards > cardStorage.getCards().size()) {
+            System.out.println("You asked for more cards than exists in database.");
+            return;
+        }
         for (int i = 1; i <= numberOfCards; i++) {
             Card currentCard = cardStorage.getCardAtIndex(i - 1);
             String printCardMessage = "Print the definition of \"" + currentCard.getTerm() + "\":";
