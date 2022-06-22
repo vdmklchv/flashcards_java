@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class CardCreator {
     Scanner sc = new Scanner(System.in);
     Card createFromUserInput(CardLookupTable cardLookupTable) {
+        /* gets name and definition of the card from user, creates and returns a card */
         System.out.println("The card:");
         Logger.addToLog("The card:");
         String term = sc.nextLine();
@@ -21,6 +22,7 @@ public class CardCreator {
         String definition = sc.nextLine();
         Logger.addToLog(definition);
 
+        // check for duplicates, return null if card exists
         if (cardLookupTable.isDefinitionExist(definition)) {
             String definitionMessage = "The definition \"" + definition + "\" already exists.";
             System.out.println(definitionMessage);
@@ -31,6 +33,7 @@ public class CardCreator {
         String pairAddedMessage = "The pair (\"" + term + "\":\"" + definition +"\") has been added.";
         System.out.println(pairAddedMessage);
         Logger.addToLog(pairAddedMessage);
+
         return new Card(term, definition);
     }
 

@@ -3,6 +3,7 @@ package flashcards;
 import java.util.*;
 
 public class CardLookupTable {
+    /* class for easy card definition lookup */
 
     Map<String, String> cardLookupTable;
 

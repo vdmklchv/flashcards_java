@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 public class App {
-
+    // FIELDS
     APP_STATE appState = APP_STATE.ON;
     CardLookupTable cardLookupTable = new CardLookupTable();
     CardStorage cardStorage = new CardStorage();
@@ -14,12 +14,16 @@ public class App {
 
 
     void start(String[] args) {
+        /* Method to start the app */
+
+        // Get and work with start arguments
         StartArgumentsManager startArgumentsManager = new StartArgumentsManager();
 
         boolean hasExportParameter = false;
         String exportParameter = "";
 
         Map<String, String> startArgumentsMap = startArgumentsManager.getStartArguments(args);
+
         if (startArgumentsManager.hasArgument(startArgumentsMap, "-import")) {
             String fileName = startArgumentsMap.get("-import");
             cardManager.importCards(screen, cardStorage, cardLookupTable, fileName);
@@ -28,6 +32,8 @@ public class App {
             hasExportParameter = true;
             exportParameter = startArgumentsMap.get("-export");
         }
+
+        // run the app
         while (isAppOn()) {
             screen.showMenu();
             String command = screen.getMenuUserCommand();
@@ -36,6 +42,8 @@ public class App {
     }
 
     private void action(String command, boolean hasExportParameter, String exportParameter) {
+        /* act depending on menu choice */
+
         StatsManager statsManager = new StatsManager();
 
         switch (command) {
@@ -87,6 +95,4 @@ public class App {
     boolean isAppOn() {
         return appState == APP_STATE.ON;
     }
-
-
 }

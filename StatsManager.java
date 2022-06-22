@@ -30,6 +30,4 @@ public class StatsManager {
         System.out.println("Card statistics have been reset.");
         Logger.addToLog("Card statistics have been reset.");
     }
-
-
 }
