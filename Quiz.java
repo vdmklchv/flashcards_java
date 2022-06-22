@@ -4,6 +4,7 @@ public class Quiz {
     void start(int numberOfCards, CardStorage cardStorage, Screen screen, CardLookupTable cardLookupTable) {
         if (numberOfCards > cardStorage.getCards().size()) {
             System.out.println("You asked for more cards than exists in database.");
+            Logger.addToLog("You asked for more cards than exists in database.");
             return;
         }
         for (int i = 1; i <= numberOfCards; i++) {
